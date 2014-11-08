@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "cheerio": "^0.18.0",
+    "cors": "^2.5.1",
+    "express": "^4.10.1",
+    "jwt-simple": "^0.2.0",
+    "request": "^2.47.0",
+    "underscore": "^1.7.0"
+  },
+  "scripts": {
+    "start": "nodemon app.coffee"
+  }
+}
