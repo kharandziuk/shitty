@@ -13,7 +13,7 @@ module.exports = (app, db)->
     *    ...in that order.
     * 
     ###
-    token = req.body.token
+    token = req.headers["authorization"]
     if token?
       try
         decoded = jwt.decode(token, app.get('jwtTokenSecret'))
