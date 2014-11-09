@@ -1,7 +1,7 @@
 url = require('url')
 jwt = require('jwt-simple')
 
-module.exports = (db)->
+module.exports = (app, db)->
   return (req, res, next)->
     parsed_url = url.parse(req.url, true)
     ###
@@ -13,17 +13,21 @@ module.exports = (db)->
     *    ...in that order.
     * 
     ###
-    token = (req.body and req.body.access_token) or
-      parsed_url.query.access_token or req.headers["x-access-token"]
-    if (token)
+    token = req.body.token
+    if token?
       try
         decoded = jwt.decode(token, app.get('jwtTokenSecret'))
-        db.findOne({ '_id': decoded.iss }, (err, user)->
-          if (!err)
-            req.user = user
-            return next()
+      catch error
+        null
+      if decoded?
+        ObjectID = require('mongodb').ObjectID
+        db.findOne({ '_id': new ObjectID(decoded.iss) }, (err, user)->
+          throw err if (err?)
+          console.log 'd', user
+          req.user = user
+          return next()
         )
-      catch
+      else
         res.end('Not authorized', 401)
         return
     else
